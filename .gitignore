@@ -5,6 +5,7 @@
 
 **/obj/
 **/bin/
+LiveCoding/
 
 # dotenv files
 .env
