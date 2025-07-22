@@ -6,6 +6,8 @@
 **/obj/
 **/bin/
 
+LiveCoding/
+nuget.config
 # dotenv files
 .env
 
