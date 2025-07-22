@@ -1,6 +1,6 @@
 public static class ConfirmationService
 {
-    public static NavigationOption ConfirmOrder( OrderData data )
+    public static NavigationOptions ConfirmOrder( OrderData data )
     {
         string confirmMessage =
             $"Здравствуйте, {data.Name}, вы заказали {data.Count} {data.Product} " +
@@ -9,12 +9,12 @@ public static class ConfirmationService
         return DataInputService.GetNavigationChoice
             (
                 confirmMessage,
-                new Dictionary<NavigationOption, string>
+                new Dictionary<NavigationOptions, string>
                 {
-                    { NavigationOption.Confirm, "Да, всё верно" },
-                    { NavigationOption.Back, "Назад к редактированию" },
-                    { NavigationOption.Menu, "В главное меню" },
-                    { NavigationOption.Cancel, "Отменить заказ" }
+                    { NavigationOptions.Confirm, "Да, всё верно" },
+                    { NavigationOptions.Back, "Назад к редактированию" },
+                    { NavigationOptions.Menu, "В главное меню" },
+                    { NavigationOptions.Cancel, "Отменить заказ" }
                 }
             );
     }

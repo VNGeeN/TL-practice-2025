@@ -2,25 +2,32 @@ public static class DataInputService
 {
     public static int GetPositiveInteger(
         string message,
-        string errorMessage = "Это поле обязательно для заполнения" )
+        string errorMessage = "Введите целое положительное число" )
     {
         int result;
+        bool isPositiveInteger = false;
 
-        while ( true )
+        do
         {
             Console.Write( message );
             var input = Console.ReadLine();
 
             if ( int.TryParse( input, out result ) && result > 0 )
             {
-                return result;
+                isPositiveInteger = true;
             }
-            Console.WriteLine( errorMessage );
+            else
+            {
+                Console.WriteLine( errorMessage );
+            }
         }
+        while ( !isPositiveInteger );
+
+        return result;
     }
     public static string GetNonEmptyString(
         string message,
-        string errorMessage = "Введите целое положительное число" )
+        string errorMessage = "Это поле обязательно для заполнения" )
     {
         while ( true )
         {
@@ -35,9 +42,9 @@ public static class DataInputService
         }
     }
 
-    public static NavigationOption GetNavigationChoice(
+    public static NavigationOptions GetNavigationChoice(
         string message,
-        Dictionary<NavigationOption, string> options )
+        Dictionary<NavigationOptions, string> options )
     {
         Console.WriteLine( message );
         Console.WriteLine( "Варианты действий:" );
@@ -51,7 +58,7 @@ public static class DataInputService
         int max = options.Keys.Max( o => ( int )o );
         int choice = GetValidatedInput( "Выберите действие ", min, max );
 
-        return ( NavigationOption )choice;
+        return ( NavigationOptions )choice;
     }
 
     public static int GetValidatedInput( string message, int minValue, int maxValue )

@@ -4,15 +4,19 @@ public static class MainMenu
     {
         Console.WriteLine( "Добро пожаловать в сервис заказа товаров!" );
     }
-    public static MenuOperation GetMenuChoice()
+
+    public static NavigationOptions GetMenuChoice()
     {
-        MenuConfig.DisplayMenu();
-        int choice = DataInputService.GetValidatedInput(
-            "Выберите пункт меню: ",
-            minValue: ( int )Enum.GetValues( typeof( MenuOperation ) ).Cast<MenuOperation>().Min(),
-            maxValue: ( int )Enum.GetValues( typeof( MenuOperation ) ).Cast<MenuOperation>().Max()
+        WelcomeMessage();
+        NavigationOptions option = DataInputService.GetNavigationChoice(
+            "---Главное меню---",
+            new Dictionary<NavigationOptions, string>
+            {
+                { NavigationOptions.Confirm, "Создать новый заказ" },
+                { NavigationOptions.Back, "Выход" }
+            }
         );
 
-        return ( MenuOperation )choice;
+        return ( NavigationOptions )option;
     }
 }

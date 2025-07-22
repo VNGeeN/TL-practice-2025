@@ -11,17 +11,17 @@ public static class OrderProcessingService
         "Подтверждение"
     };
 
-    public static void StartOrderProcess( Action backToMenuAction )
+    public static void StartOrderProcess()
     {
         ResetOrder();
 
         while ( _currentStep < _steps.Length )
         {
-            var shouldContinue = ProcessCurrentStep( backToMenuAction );
+            var shouldContinue = ProcessCurrentStep();
             if ( !shouldContinue ) return;
         }
 
-        FinalizeOrder( backToMenuAction );
+        FinalizeOrder();
 
     }
 
@@ -31,7 +31,7 @@ public static class OrderProcessingService
         _currentStep = 0;
     }
 
-    private static bool ProcessCurrentStep( Action backToMenuAction )
+    private static bool ProcessCurrentStep()
     {
         Console.WriteLine( $"\nШаг {_currentStep + 1}: {_steps[ _currentStep ]}" );
 
@@ -41,7 +41,7 @@ public static class OrderProcessingService
             case 1: return ProcessCountStep();
             case 2: return ProcessNameStep();
             case 3: return ProcessAddressStep();
-            case 4: return ProcessConfirmationStep( backToMenuAction );
+            case 4: return ProcessConfirmationStep();
             default: return true;
         }
     }
@@ -86,7 +86,7 @@ public static class OrderProcessingService
         return true;
     }
 
-    private static bool ProcessConfirmationStep( Action backToMenuAction )
+    private static bool ProcessConfirmationStep()
     {
         var validationErrors = ValidateOrder( _currentOrder );
 
@@ -106,18 +106,18 @@ public static class OrderProcessingService
 
         switch ( response )
         {
-            case NavigationOption.Confirm:
+            case NavigationOptions.Confirm:
                 _currentStep++;
                 return true;
-            case NavigationOption.Back:
+            case NavigationOptions.Back:
                 ShowEditOptions();
                 return true;
-            case NavigationOption.Menu:
-                backToMenuAction();
+            case NavigationOptions.Menu:
+                Program.ReturnToMainMenu();
                 return false;
-            case NavigationOption.Cancel:
+            case NavigationOptions.Cancel:
                 Console.WriteLine( "Заказ отменен." );
-                backToMenuAction();
+                Program.ReturnToMainMenu();
                 return false;
             default:
                 return true;
@@ -225,34 +225,46 @@ public static class OrderProcessingService
 
     private static int FindFirstInvalidStep( OrderData order )
     {
-        if ( string.IsNullOrWhiteSpace( order.Product ) ) return 0;
-        if ( order.Count <= 0 ) return 1;
-        if ( string.IsNullOrWhiteSpace( order.Name ) ) return 2;
-        if ( string.IsNullOrWhiteSpace( order.Address ) ) return 3;
+        if ( string.IsNullOrWhiteSpace( order.Product ) )
+        {
+            return 0;
+        }
+        if ( order.Count <= 0 )
+        {
+            return 1;
+        }
+        if ( string.IsNullOrWhiteSpace( order.Name ) )
+        {
+            return 2;
+        }
+        if ( string.IsNullOrWhiteSpace( order.Address ) )
+        {
+            return 3;
+        }
         return 4; // Если все заполнено, остаемся на подтверждении
     }
 
-    private static void FinalizeOrder( Action backToMenuAction )
+    private static void FinalizeOrder()
     {
         OrderDeliveryService.SuccesfullOrder( _currentOrder );
 
         var response = DataInputService.GetNavigationChoice
         (
             "\nЗаказ оформлен! Что вы ходите сделать дальше? ",
-            new Dictionary<NavigationOption, string>
+            new Dictionary<NavigationOptions, string>
             {
-                { NavigationOption.Confirm, "Создать новый заказ" },
-                { NavigationOption.Back, "Вернуться в главное меню" }
+                { NavigationOptions.Confirm, "Создать новый заказ" },
+                { NavigationOptions.Back, "Вернуться в главное меню" }
             }
         );
 
-        if ( response == NavigationOption.Confirm )
+        if ( response == NavigationOptions.Confirm )
         {
-            StartOrderProcess( backToMenuAction );
+            StartOrderProcess();
         }
         else
         {
-            backToMenuAction();
+            Program.ReturnToMainMenu();
         }
     }
 }

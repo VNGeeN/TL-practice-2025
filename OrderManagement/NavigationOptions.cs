@@ -1,4 +1,4 @@
-public enum NavigationOption
+public enum NavigationOptions
 {
     Confirm = 1,
     Back = 2,

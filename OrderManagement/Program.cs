@@ -8,15 +8,14 @@ class Program
     {
         while ( _inMainMenu )
         {
-            MainMenu.WelcomeMessage();
-            var operation = MainMenu.GetMenuChoice();
+            NavigationOptions operation = MainMenu.GetMenuChoice();
 
             switch ( operation )
             {
-                case MenuOperation.CreateOrder:
+                case NavigationOptions.Confirm:
                     ProcessOrder();
                     break;
-                case MenuOperation.Exit:
+                case NavigationOptions.Back:
                     Console.WriteLine( "Спасибо за использование нашего сервиса!" );
                     return;
             }
@@ -27,7 +26,7 @@ class Program
     {
         try
         {
-            OrderProcessingService.StartOrderProcess( ReturnToMainMenu );
+            OrderProcessingService.StartOrderProcess();
         }
         catch ( Exception ex )
         {
@@ -36,7 +35,7 @@ class Program
         }
     }
 
-    private static void ReturnToMainMenu()
+    public static void ReturnToMainMenu()
     {
         _inMainMenu = true;
         Console.WriteLine( "\nНажмите любую клавишу для возврата в главное меню" );
