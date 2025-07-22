@@ -6,8 +6,7 @@ public static class ConfirmationService
             $"Здравствуйте, {data.Name}, вы заказали {data.Count} {data.Product} " +
             $"на адрес {data.Address}, всё верно ? ";
 
-        return DataInputService.GetNavigationChoice
-            (
+        return DataInputService.GetNavigationChoice(
                 confirmMessage,
                 new Dictionary<NavigationOptions, string>
                 {
@@ -15,7 +14,6 @@ public static class ConfirmationService
                     { NavigationOptions.Back, "Назад к редактированию" },
                     { NavigationOptions.Menu, "В главное меню" },
                     { NavigationOptions.Cancel, "Отменить заказ" }
-                }
-            );
+                } );
     }
 }

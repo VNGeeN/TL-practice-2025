@@ -248,15 +248,13 @@ public static class OrderProcessingService
     {
         OrderDeliveryService.SuccesfullOrder( _currentOrder );
 
-        var response = DataInputService.GetNavigationChoice
-        (
+        var response = DataInputService.GetNavigationChoice(
             "\nЗаказ оформлен! Что вы ходите сделать дальше? ",
             new Dictionary<NavigationOptions, string>
             {
                 { NavigationOptions.Confirm, "Создать новый заказ" },
                 { NavigationOptions.Back, "Вернуться в главное меню" }
-            }
-        );
+            } );
 
         if ( response == NavigationOptions.Confirm )
         {

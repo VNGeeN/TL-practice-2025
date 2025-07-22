@@ -14,8 +14,7 @@ public static class MainMenu
             {
                 { NavigationOptions.Confirm, "Создать новый заказ" },
                 { NavigationOptions.Back, "Выход" }
-            }
-        );
+            } );
 
         return ( NavigationOptions )option;
     }
