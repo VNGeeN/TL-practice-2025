@@ -35,7 +35,7 @@ class Program
     {
         try
         {
-            UserDataProcessingService.StartUserDataProcess( ReturnToMainMenu );
+            UserDataProcessingService.StartUserDataProcess();
         }
         catch ( Exception ex )
         {
@@ -44,7 +44,7 @@ class Program
         }
     }
 
-    private static void ReturnToMainMenu()
+    public static void ReturnToMainMenu()
     {
         _isMainMenu = true;
         Console.WriteLine( "\nНажмите любую клавишу для возвращения в главное меню" );

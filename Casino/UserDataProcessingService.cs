@@ -12,23 +12,23 @@ namespace Casino
             "Подтверждение"
         };
 
-        public static void StartUserDataProcess( Action backToMenuAction )
+        public static void StartUserDataProcess()
         {
             while ( _currentStep < _steps.Length )
             {
-                var shouldContinue = ProccessCurrentStep( backToMenuAction );
+                var shouldContinue = ProccessCurrentStep();
                 if ( !shouldContinue ) return;
             }
         }
 
-        private static bool ProccessCurrentStep( Action backToMenuAction )
+        private static bool ProccessCurrentStep()
         {
             Console.WriteLine( $"\nШаг {_currentStep + 1}: {_steps[ _currentStep ]}" );
             switch ( _currentStep )
             {
                 case 0: return ProcessUserNameStep();
                 case 1: return ProcessUserBalanceStep();
-                case 2: return ProcessConfirmationStep( backToMenuAction );
+                case 2: return ProcessConfirmationStep();
                 default: return true;
             }
         }
@@ -53,7 +53,7 @@ namespace Casino
             return true;
         }
 
-        private static bool ProcessConfirmationStep( Action backToMenuAction )
+        private static bool ProcessConfirmationStep()
         {
             var validationErrors = ValidateUserData( _userData );
 
@@ -71,7 +71,7 @@ namespace Casino
             Console.WriteLine( "Введённые данные:" );
             ShowUserData();
 
-            backToMenuAction();
+            Program.ReturnToMainMenu();
             return false;
         }
 
