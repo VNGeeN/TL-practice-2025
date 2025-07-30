@@ -35,7 +35,7 @@ public static class OrderProcessingService
     {
         Console.WriteLine( $"\nШаг {_currentStep + 1}: {_steps[ _currentStep ]}" );
 
-        if ( _currentStep == 4 )
+        if ( _currentStep == ( int )OrderStep.Confirmation )
         {
             return ProcessConfirmationStep();
         }
@@ -47,25 +47,25 @@ public static class OrderProcessingService
     {
         switch ( _currentStep )
         {
-            case 0:
+            case ( int )OrderStep.Product:
                 _currentOrder.Product = DataInputService.GetNonEmptyString(
                     "Введите название товара: ",
                     "Ошибка! Название товара не может быть пустым. Пожалуйста, введите значение."
                 );
                 break;
-            case 1:
+            case ( int )OrderStep.Count:
                 _currentOrder.Count = DataInputService.GetPositiveInteger(
                     "Введите количество товара: ",
                     "Ошибка! Количество должно быть целым положительным числом."
                 );
                 break;
-            case 2:
+            case ( int )OrderStep.Name:
                 _currentOrder.Name = DataInputService.GetNonEmptyString(
                     "Введите ваше имя: ",
                     "Ошибка! Имя не может быть пустым. Пожалуйста, введите значение."
                 );
                 break;
-            case 3:
+            case ( int )OrderStep.Address:
                 _currentOrder.Address = DataInputService.GetNonEmptyString(
                     "Введите адрес доставки: ",
                     "Ошибка! Адрес доставки не может быть пустым. Пожалуйста, введите значение."
@@ -87,7 +87,7 @@ public static class OrderProcessingService
                 Console.WriteLine( $"- {error}" );
             }
 
-            _currentStep = FindFirstInvalidStep( _currentOrder );
+            _currentStep = ( int )FindFirstInvalidStep( _currentOrder );
             return true;
         }
 
@@ -212,25 +212,25 @@ public static class OrderProcessingService
         return errors;
     }
 
-    private static int FindFirstInvalidStep( OrderData order )
+    private static OrderStep FindFirstInvalidStep( OrderData order )
     {
         if ( string.IsNullOrWhiteSpace( order.Product ) )
         {
-            return 0;
+            return OrderStep.Product;
         }
         if ( order.Count <= 0 )
         {
-            return 1;
+            return OrderStep.Count;
         }
         if ( string.IsNullOrWhiteSpace( order.Name ) )
         {
-            return 2;
+            return OrderStep.Name;
         }
         if ( string.IsNullOrWhiteSpace( order.Address ) )
         {
-            return 3;
+            return OrderStep.Address;
         }
-        return 4; // Если все заполнено, остаемся на подтверждении
+        return OrderStep.Confirmation;
     }
 
     private static void FinalizeOrder()
