@@ -148,7 +148,7 @@ public static class OrderProcessingService
     {
         switch ( _currentStep )
         {
-            case 0:
+            case ( int )OrderStep.Product:
                 Console.WriteLine( $"Текущее значение: {_currentOrder.Product}" );
                 _currentOrder.Product = DataInputService.GetNonEmptyString(
                     "Введите новое название товара: ",
@@ -156,7 +156,8 @@ public static class OrderProcessingService
                 );
                 return true;
 
-            case 1:
+            case ( int )OrderStep.Count:
+
                 Console.WriteLine( $"Текущее значение: {_currentOrder.Count}" );
                 _currentOrder.Count = DataInputService.GetPositiveInteger(
                     "Введите новое количество товара: ",
@@ -164,7 +165,7 @@ public static class OrderProcessingService
                 );
                 return true;
 
-            case 2:
+            case ( int )OrderStep.Name:
                 Console.WriteLine( $"Текущее значение: {_currentOrder.Name}" );
                 _currentOrder.Name = DataInputService.GetNonEmptyString(
                     "Введите новое имя: ",
@@ -172,7 +173,7 @@ public static class OrderProcessingService
                 );
                 return true;
 
-            case 3:
+            case ( int )OrderStep.Address:
                 Console.WriteLine( $"Текущее значение: {_currentOrder.Address}" );
                 _currentOrder.Address = DataInputService.GetNonEmptyString(
                     "Введите новый адрес доставки: ",
