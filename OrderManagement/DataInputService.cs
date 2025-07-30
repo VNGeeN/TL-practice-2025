@@ -10,7 +10,7 @@ public static class DataInputService
         do
         {
             Console.Write( message );
-            var input = Console.ReadLine();
+            string? input = Console.ReadLine();
 
             if ( int.TryParse( input, out result ) && result > 0 )
             {
@@ -32,7 +32,7 @@ public static class DataInputService
         while ( true )
         {
             Console.Write( message );
-            var input = Console.ReadLine()?.Trim();
+            string? input = Console.ReadLine()?.Trim();
             if ( !string.IsNullOrWhiteSpace( input ) )
             {
                 return input;
@@ -49,7 +49,7 @@ public static class DataInputService
         Console.WriteLine( message );
         Console.WriteLine( "Варианты действий:" );
 
-        foreach ( var option in options )
+        foreach ( KeyValuePair<NavigationOptions, string> option in options )
         {
             Console.WriteLine( $"{( int )option.Key}. {option.Value}" );
         }

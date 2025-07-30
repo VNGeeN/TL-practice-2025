@@ -7,6 +7,8 @@
 **/bin/
 LiveCoding/
 nuget.config
+.vscode/
+global.json
 
 # dotenv files
 .env

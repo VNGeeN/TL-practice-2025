@@ -17,7 +17,7 @@ public static class OrderProcessingService
 
         while ( _currentStep < _steps.Length )
         {
-            var shouldContinue = ProcessCurrentStep();
+            bool shouldContinue = ProcessCurrentStep();
             if ( !shouldContinue ) return;
         }
 
@@ -88,12 +88,12 @@ public static class OrderProcessingService
 
     private static bool ProcessConfirmationStep()
     {
-        var validationErrors = ValidateOrder( _currentOrder );
+        List<string> validationErrors = ValidateOrder( _currentOrder );
 
         if ( validationErrors.Any() )
         {
             Console.WriteLine( "\nОшибки в данных заказа:" );
-            foreach ( var error in validationErrors )
+            foreach ( string error in validationErrors )
             {
                 Console.WriteLine( $"- {error}" );
             }
@@ -102,7 +102,7 @@ public static class OrderProcessingService
             return true;
         }
 
-        var response = ConfirmationService.ConfirmOrder( _currentOrder );
+        NavigationOptions response = ConfirmationService.ConfirmOrder( _currentOrder );
 
         switch ( response )
         {
@@ -133,7 +133,7 @@ public static class OrderProcessingService
         Console.WriteLine( "4. Адрес" );
         Console.WriteLine( "5. Вернуться к подтверждению" );
 
-        var choice = DataInputService.GetValidatedInput(
+        int choice = DataInputService.GetValidatedInput(
             "Выберите поле: ",
             minValue: 1,
             maxValue: 5
@@ -198,7 +198,7 @@ public static class OrderProcessingService
 
     private static List<string> ValidateOrder( OrderData order )
     {
-        var errors = new List<string>();
+        List<string> errors = new List<string>();
 
         if ( string.IsNullOrWhiteSpace( order.Product ) )
         {
@@ -248,7 +248,7 @@ public static class OrderProcessingService
     {
         OrderDeliveryService.SuccesfullOrder( _currentOrder );
 
-        var response = DataInputService.GetNavigationChoice(
+        NavigationOptions response = DataInputService.GetNavigationChoice(
             "\nЗаказ оформлен! Что вы ходите сделать дальше? ",
             new Dictionary<NavigationOptions, string>
             {
