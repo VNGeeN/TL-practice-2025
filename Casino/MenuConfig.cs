@@ -21,7 +21,7 @@ namespace Casino
         {
             Console.WriteLine( GameName );
             Console.WriteLine( "---Главное меню---" );
-            foreach ( var item in MenuItems )
+            foreach ( KeyValuePair<MenuOperations, string> item in MenuItems )
             {
                 Console.WriteLine( $"{( int )item.Key}. {item.Value}" );
             }

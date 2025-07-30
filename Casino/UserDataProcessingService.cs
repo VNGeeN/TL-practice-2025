@@ -16,7 +16,7 @@ namespace Casino
         {
             while ( _currentStep < _steps.Length )
             {
-                var shouldContinue = ProccessCurrentStep();
+                bool shouldContinue = ProccessCurrentStep();
                 if ( !shouldContinue ) return;
             }
         }
@@ -55,12 +55,12 @@ namespace Casino
 
         private static bool ProcessConfirmationStep()
         {
-            var validationErrors = ValidateUserData( _userData );
+            List<string> validationErrors = ValidateUserData( _userData );
 
             if ( validationErrors.Any() )
             {
                 Console.WriteLine( "\nОшибки в данных игрока:" );
-                foreach ( var error in validationErrors )
+                foreach ( string error in validationErrors )
                 {
                     Console.WriteLine( $"- {error}" );
                 }
@@ -84,7 +84,7 @@ namespace Casino
 
         private static List<string> ValidateUserData( UserGameData userData )
         {
-            var errors = new List<string>();
+            List<string> errors = new List<string>();
 
             if ( string.IsNullOrWhiteSpace( userData.UserName ) )
             {

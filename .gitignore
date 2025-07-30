@@ -8,6 +8,8 @@
 
 LiveCoding/
 nuget.config
+global.json
+.vscode/
 # dotenv files
 .env
 

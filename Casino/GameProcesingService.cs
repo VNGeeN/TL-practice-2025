@@ -26,7 +26,7 @@ namespace Casino
                 return;
             }
 
-            var rand = new Random();
+            Random rand = new Random();
             int roll = rand.Next( 1, 21 );
 
             Console.WriteLine( $"Выпало число {roll}" );

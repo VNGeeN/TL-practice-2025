@@ -9,7 +9,7 @@ class Program
         while ( _isMainMenu )
         {
             MainMenu.WelcomeMessage();
-            var options = MainMenu.MainMenuChoice();
+            MenuOperations options = MainMenu.MainMenuChoice();
 
             switch ( options )
             {
