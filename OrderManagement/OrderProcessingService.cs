@@ -35,55 +35,44 @@ public static class OrderProcessingService
     {
         Console.WriteLine( $"\nШаг {_currentStep + 1}: {_steps[ _currentStep ]}" );
 
+        if ( _currentStep == 4 )
+        {
+            return ProcessConfirmationStep();
+        }
+        ProcessStep();
+        return true;
+    }
+
+    private static void ProcessStep()
+    {
         switch ( _currentStep )
         {
-            case 0: return ProcessProductStep();
-            case 1: return ProcessCountStep();
-            case 2: return ProcessNameStep();
-            case 3: return ProcessAddressStep();
-            case 4: return ProcessConfirmationStep();
-            default: return true;
+            case 0:
+                _currentOrder.Product = DataInputService.GetNonEmptyString(
+                    "Введите название товара: ",
+                    "Ошибка! Название товара не может быть пустым. Пожалуйста, введите значение."
+                );
+                break;
+            case 1:
+                _currentOrder.Count = DataInputService.GetPositiveInteger(
+                    "Введите количество товара: ",
+                    "Ошибка! Количество должно быть целым положительным числом."
+                );
+                break;
+            case 2:
+                _currentOrder.Name = DataInputService.GetNonEmptyString(
+                    "Введите ваше имя: ",
+                    "Ошибка! Имя не может быть пустым. Пожалуйста, введите значение."
+                );
+                break;
+            case 3:
+                _currentOrder.Address = DataInputService.GetNonEmptyString(
+                    "Введите адрес доставки: ",
+                    "Ошибка! Адрес доставки не может быть пустым. Пожалуйста, введите значение."
+                );
+                break;
         }
-    }
-
-    private static bool ProcessProductStep()
-    {
-        _currentOrder.Product = DataInputService.GetNonEmptyString(
-            "Введите название товара: ",
-            "Ошибка! Название товара не может быть пустым. Пожалуйста, введите значение."
-        );
         _currentStep++;
-        return true;
-    }
-
-    private static bool ProcessCountStep()
-    {
-        _currentOrder.Count = DataInputService.GetPositiveInteger(
-            "Введите количество товара: ",
-            "Ошибка! Количество должно быть целым положительным числом."
-        );
-        _currentStep++;
-        return true;
-    }
-
-    private static bool ProcessNameStep()
-    {
-        _currentOrder.Name = DataInputService.GetNonEmptyString(
-            "Введите ваше имя: ",
-            "Ошибка! Имя не может быть пустым. Пожалуйста, введите значение."
-        );
-        _currentStep++;
-        return true;
-    }
-
-    private static bool ProcessAddressStep()
-    {
-        _currentOrder.Address = DataInputService.GetNonEmptyString(
-            "Введите адрес доставки: ",
-            "Ошибка! Адрес доставки не может быть пустым. Пожалуйста, введите значение."
-        );
-        _currentStep++;
-        return true;
     }
 
     private static bool ProcessConfirmationStep()
