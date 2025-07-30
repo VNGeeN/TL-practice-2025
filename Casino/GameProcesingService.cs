@@ -5,6 +5,9 @@ namespace Casino
     public static class GameProcessingService
     {
         private static double _multiplicator = 0.10;
+        const int MaxNumberInSet = 20;
+        const int MinWinNumber = 18;
+        const int RollDivider = MinWinNumber - 1; // 17
         public static void StartGame()
         {
             if ( string.IsNullOrWhiteSpace( UserDataProcessingService._userData.UserName ) ||
@@ -27,14 +30,14 @@ namespace Casino
             }
 
             Random rand = new Random();
-            int roll = rand.Next( 1, 21 );
+            int roll = rand.Next( 1, MaxNumberInSet + 1 );
 
             Console.WriteLine( $"Выпало число {roll}" );
 
-            if ( roll >= 18 )
+            if ( roll >= MinWinNumber )
             {
 
-                double winCash = bet * ( 1 + ( _multiplicator * ( roll % 17 ) ) );
+                double winCash = bet * ( 1 + ( _multiplicator * ( roll % RollDivider ) ) );
                 UserDataProcessingService._userData.UserBalance += ( int )Math.Round( winCash );
                 Console.WriteLine( $"Поздравляем! Вы выйграли: {Math.Round( winCash )}. Ваш новый баланс: {UserDataProcessingService._userData.UserBalance}" );
             }
