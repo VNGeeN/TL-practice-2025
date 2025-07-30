@@ -29,17 +29,19 @@ public static class DataInputService
         string message,
         string errorMessage = "Это поле обязательно для заполнения" )
     {
-        while ( true )
+        bool isValid = false;
+        string? input = null;
+        while ( !isValid )
         {
             Console.Write( message );
-            string? input = Console.ReadLine()?.Trim();
-            if ( !string.IsNullOrWhiteSpace( input ) )
+            input = Console.ReadLine()?.Trim();
+            isValid = !string.IsNullOrWhiteSpace( input );
+            if ( !isValid )
             {
-                return input;
+                Console.WriteLine( errorMessage );
             }
-
-            Console.WriteLine( errorMessage );
         }
+        return input!;
     }
 
     public static NavigationOptions GetNavigationChoice(
@@ -64,14 +66,16 @@ public static class DataInputService
     public static int GetValidatedInput( string message, int minValue, int maxValue )
     {
         int input;
-        while ( true )
+        bool isValid;
+        do
         {
             Console.Write( message );
-            if ( int.TryParse( Console.ReadLine(), out input ) && input >= minValue && input <= maxValue )
+            isValid = int.TryParse( Console.ReadLine(), out input ) && input >= minValue && input <= maxValue;
+            if ( !isValid )
             {
-                return input;
+                Console.WriteLine( $"Ошибка! Введите число от {minValue} до {maxValue}" );
             }
-            Console.WriteLine( $"Ошибка! Введите число от {minValue} до {maxValue}" );
-        }
+        } while ( !isValid );
+        return input;
     }
 }
