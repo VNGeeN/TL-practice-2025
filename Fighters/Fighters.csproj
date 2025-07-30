@@ -7,4 +7,21 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Core/" />
+    <Folder Include="Entities/" />
+    <Folder Include="Entities/Armors/" />
+    <Folder Include="Entities/Characters/" />
+    <Folder Include="Entities/Classes/" />
+    <Folder Include="Entities/Races/" />
+    <Folder Include="Entities/Weapons/" />
+    <Folder Include="UI/" />
+    <Folder Include="UI/Enums/" />
+    <Folder Include="UI/Interfaces/" />
+    <Folder Include="UI/Menus/" />
+    <Folder Include="UI/Services/" />
+    <Folder Include="Utilities/" />
+    <Folder Include="Utilities/Extensions/" />
+  </ItemGroup>
+
 </Project>

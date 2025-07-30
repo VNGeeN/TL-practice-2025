@@ -5,6 +5,10 @@
 
 **/obj/
 **/bin/
+LiveCoding/
+global.json
+.vscode
+nuget.config
 
 # dotenv files
 .env

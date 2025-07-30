@@ -1,0 +1,16 @@
+using Fighters.Entities.Characters;
+using Fighters.UI.Enums;
+
+namespace Fighters.UI.Menus
+{
+    public abstract class MenuBase
+    {
+        public MenuState CurrentState { get; set; }
+        public MenuState PreviousState { get; set; }
+        public IFighter? CurrentFighter { get; set; }
+        public string FighterType { get; set; } = "Боец";
+
+        public abstract void Display();
+        public abstract void HandleInput( NavigationOptions option );
+    }
+}
