@@ -1,61 +1,71 @@
 namespace Casino
 {
-    public static class UserDataProcessingService
+    public class UserDataProcessingService
     {
-        public static UserGameData _userData = new();
+        private readonly UserDataService _userDataService;
+        private readonly IDataInputService _dataInputService;
 
-        private static int _currentStep = 0;
+        private int _currentStep = 0;
 
-        private static readonly string[] _steps = {
+        private readonly string[] _steps = {
             "Ввод имени игрока",
             "Ввод баланса игрока",
             "Подтверждение"
         };
 
-        public static void StartUserDataProcess()
+        public UserDataProcessingService(
+            UserDataService userDataService,
+            IDataInputService dataInputService )
         {
+            _userDataService = userDataService;
+            _dataInputService = dataInputService;
+        }
+
+        public void StartUserDataProcess()
+        {
+            _currentStep = 0;
             while ( _currentStep < _steps.Length )
             {
-                bool shouldContinue = ProccessCurrentStep();
+                bool shouldContinue = ProcessCurrentStep();
                 if ( !shouldContinue ) return;
             }
         }
 
-        private static bool ProccessCurrentStep()
+        private bool ProcessCurrentStep()
         {
             Console.WriteLine( $"\nШаг {_currentStep + 1}: {_steps[ _currentStep ]}" );
+
+            if ( _currentStep == ( int )UserDataStep.Confirmation )
+            {
+                return ProcessConfirmationStep();
+            }
+            ProcessStep();
+            return true;
+        }
+
+        private void ProcessStep()
+        {
             switch ( _currentStep )
             {
-                case 0: return ProcessUserNameStep();
-                case 1: return ProcessUserBalanceStep();
-                case 2: return ProcessConfirmationStep();
-                default: return true;
+                case ( int )UserDataStep.UserName:
+                    _userDataService.UserData.UserName = _dataInputService.GetNonEmptyString(
+                        "Введите имя игрока: ",
+                        "Ошибка! Имя игрока не может быть пустым. Пожалуйста, введите значение."
+                    );
+                    break;
+                case ( int )UserDataStep.UserBalance:
+                    _userDataService.UserData.UserBalance = _dataInputService.GetPositiveInteger(
+                        "Введите баланс игрока: ",
+                        "Ошибка! Значение должно быть целым положительным числом."
+                    );
+                    break;
             }
-        }
-
-        private static bool ProcessUserNameStep()
-        {
-            _userData.UserName = DataInputService.GetNonEmptyString(
-                "Введите имя игрока: ",
-                "Ошибка! Имя игрока не может быть пустым. Пожалуйста, введите значение."
-            );
             _currentStep++;
-            return true;
         }
 
-        private static bool ProcessUserBalanceStep()
+        private bool ProcessConfirmationStep()
         {
-            _userData.UserBalance = DataInputService.GetPositiveInteger(
-                "Введите баланс игрока: ",
-                "Ошибка! Значение должно быть целым положительным числом."
-            );
-            _currentStep++;
-            return true;
-        }
-
-        private static bool ProcessConfirmationStep()
-        {
-            List<string> validationErrors = ValidateUserData( _userData );
+            List<string> validationErrors = ValidateUserData( _userDataService.UserData );
 
             if ( validationErrors.Any() )
             {
@@ -69,20 +79,20 @@ namespace Casino
             }
 
             Console.WriteLine( "Введённые данные:" );
-            ShowUserData();
+            ShowUserData( _userDataService.UserData );
 
             Program.ReturnToMainMenu();
             return false;
         }
 
-        public static void ShowUserData()
+        public void ShowUserData( UserGameData userData )
         {
             Console.WriteLine( "\n---Данные игрока---" );
-            Console.WriteLine( $"Имя игрока: {_userData.UserName}" );
-            Console.WriteLine( $"Баланс игрока: {_userData.UserBalance}" );
+            Console.WriteLine( $"Имя игрока: {userData.UserName}" );
+            Console.WriteLine( $"Баланс игрока: {userData.UserBalance}" );
         }
 
-        private static List<string> ValidateUserData( UserGameData userData )
+        private List<string> ValidateUserData( UserGameData userData )
         {
             List<string> errors = new List<string>();
 

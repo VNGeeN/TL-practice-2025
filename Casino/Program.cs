@@ -6,6 +6,11 @@ class Program
 
     static void Main()
     {
+        UserDataService userDataService = new();
+        ConsoleDataInputService dataInputService = new();
+        UserDataProcessingService userProcessing = new( userDataService, dataInputService );
+        GameProcessingService gameProcessing = new( userDataService, dataInputService );
+
         while ( _isMainMenu )
         {
             MainMenu.WelcomeMessage();
@@ -14,33 +19,23 @@ class Program
             switch ( options )
             {
                 case MenuOperations.InitUserGameData:
-                    ProcessInitUserGameData();
+                    userProcessing.StartUserDataProcess();
                     break;
+
                 case MenuOperations.ShowUserBalance:
-                    UserDataProcessingService.ShowUserData();
+                    userProcessing.ShowUserData( userDataService.UserData );
                     ReturnToMainMenu();
                     break;
+
                 case MenuOperations.StartGame:
-                    GameProcessingService.StartGame();
+                    gameProcessing.StartGame();
                     ReturnToMainMenu();
                     break;
+
                 case MenuOperations.Exit:
                     Console.WriteLine( "спасибо за игру!" );
                     return;
             }
-        }
-    }
-
-    private static void ProcessInitUserGameData()
-    {
-        try
-        {
-            UserDataProcessingService.StartUserDataProcess();
-        }
-        catch ( Exception ex )
-        {
-            Console.WriteLine( $"Произошла ошибка: {ex.Message}" );
-            ReturnToMainMenu();
         }
     }
 
