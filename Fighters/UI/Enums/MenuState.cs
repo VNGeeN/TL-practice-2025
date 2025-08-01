@@ -9,6 +9,8 @@ namespace Fighters.UI.Enums
         SelectClass,
         SelectWeapon,
         SelectArmor,
-        Battle
+        Battle,
+        Exit,
+        Recreation,
     }
 }

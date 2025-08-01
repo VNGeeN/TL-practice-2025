@@ -15,7 +15,7 @@ namespace Fighters.Core
             Console.WriteLine( "----------------------------------" );
 
             int round = 1;
-            var aliveFighters = fighters.ToList();  // Копия списка для отслеживания живых бойцов
+            List<IFighter> aliveFighters = fighters.ToList();  // Копия списка для отслеживания живых бойцов
 
             // Основной цикл битвы (пока не останется 1 победитель)
             while ( aliveFighters.Count > 1 )
@@ -23,14 +23,14 @@ namespace Fighters.Core
                 Console.WriteLine( $"\nРАУНД {round++}" );
 
                 // Случайный порядок ходов в раунде
-                var shuffled = aliveFighters.OrderBy( f => _random.Next() ).ToList();
+                List<IFighter>? shuffled = aliveFighters.OrderBy( f => _random.Next() ).ToList();
 
                 // Обработка хода каждого бойца
-                foreach ( var attacker in shuffled )
+                foreach ( IFighter attacker in shuffled )
                 {
                     if ( attacker.CurrentHealth <= 0 ) continue;  // Пропуск мертвых
 
-                    var target = Get_randomTarget( attacker, aliveFighters );
+                    IFighter? target = Get_randomTarget( attacker, aliveFighters );
                     if ( target == null ) break;  // Если не осталось целей
 
                     // Расчет параметров атаки
@@ -67,7 +67,7 @@ namespace Fighters.Core
 
         private IFighter? Get_randomTarget( IFighter attacker, List<IFighter> fighters )
         {
-            var possibleTargets = fighters
+            List<IFighter> possibleTargets = fighters
                 .Where( f => f != attacker && f.CurrentHealth > 0 )
                 .ToList();
 

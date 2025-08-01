@@ -24,7 +24,7 @@ namespace Fighters.Core
             if ( armor == null ) throw new ArgumentNullException( "Броня не выбрана" );
 
             // Создание и конфигурация бойца
-            var fighter = new CustomFighter( fighterType, race, fighterClass );
+            CustomFighter fighter = new CustomFighter( fighterType, race, fighterClass );
             fighter.SetWeapon( weapon );
             fighter.SetArmor( armor );
 

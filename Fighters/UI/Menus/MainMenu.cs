@@ -25,31 +25,26 @@ namespace Fighters.UI.Menus
             switch ( option )
             {
                 case NavigationOptions.Confirm:
-                    switch ( CurrentState )
+                    string? input = Console.ReadLine();
+                    if ( int.TryParse( input, out int choice ) )
                     {
-                        case MenuState.MainMenu:
-                            var input = Console.ReadLine();
-                            if ( int.TryParse( input, out int choice ) )
-                            {
-                                switch ( choice )
-                                {
-                                    case 1:
-                                        CurrentState = MenuState.CreateFighter;
-                                        FighterType = "Боец";
-                                        break;
-                                    case 2:
-                                        CurrentState = MenuState.CreateOpponent;
-                                        FighterType = "Противник";
-                                        break;
-                                    case 3:
-                                        CurrentState = MenuState.Battle;
-                                        break;
-                                    case 4:
-                                        Environment.Exit( 0 );
-                                        break;
-                                }
-                            }
-                            break;
+                        switch ( choice )
+                        {
+                            case 1:
+                                NavigateTo( MenuState.CreateFighter );
+                                FighterType = "Боец";
+                                break;
+                            case 2:
+                                NavigateTo( MenuState.CreateOpponent );
+                                FighterType = "Противник";
+                                break;
+                            case 3:
+                                NavigateTo( MenuState.Battle );
+                                break;
+                            case 4:
+                                NavigateTo( MenuState.Exit );
+                                break;
+                        }
                     }
                     break;
             }
