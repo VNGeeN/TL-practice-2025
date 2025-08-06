@@ -4,8 +4,13 @@ namespace CarFactory.UI
 {
     public class MainMenu
     {
-        private readonly CarConfigurator _configurator = new CarConfigurator();
+        private readonly ICarConfigurator _configurator;
         private readonly List<ICar> _configuredCars = new List<ICar>();
+
+        public MainMenu( ICarConfigurator configurator )
+        {
+            _configurator = configurator;
+        }
 
         public void Show()
         {

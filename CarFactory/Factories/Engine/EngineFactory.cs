@@ -1,17 +1,17 @@
 using CarFactory.Entities.Engines;
 using CarFactory.Enums;
 
-namespace CarFactory.Factories
+namespace CarFactory.Factories.Engine
 {
-    public static class EngineFactory
+    public class EngineFactory : IEngineFactory
     {
-        public static IEngine CreateEngine( EngineType engineType )
+        public IEngine CreateEngine( EngineType engineType )
         {
             return engineType switch
             {
                 EngineType.Gasoline => new GasolineEngine(),
                 EngineType.Diesel => new DieselEngine(),
-                _ => throw new ArgumentOutOfRangeException( nameof( engineType ), engineType, null )
+                _ => throw new ArgumentException( $"Неподдерживаемый тип двигателя: {engineType}" )
             };
         }
     }

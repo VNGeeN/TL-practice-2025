@@ -1,27 +1,45 @@
 using CarFactory.Enums;
-using CarFactory.Factories;
+using CarFactory.Factories.Body;
+using CarFactory.Factories.Transmission;
+using CarFactory.Factories.Engine;
 using CarFactory.Entities.Cars;
 using CarFactory.Entities.Engines;
 using CarFactory.Entities.Transmissions;
 using CarFactory.Entities.Bodies;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace CarFactory.UI
 {
-    public class CarConfigurator
+    public class CarConfigurator : ICarConfigurator
     {
+        private readonly IEngineFactory _engineFactory;
+        private readonly ITransmissionFactory _transmissionFactory;
+        private readonly IBodyFactory _bodyFactory;
+
+        public CarConfigurator( IEngineFactory engineFactory,
+            ITransmissionFactory transmissionFactory,
+            IBodyFactory bodyFactory )
+        {
+            _engineFactory = engineFactory;
+            _transmissionFactory = transmissionFactory;
+            _bodyFactory = bodyFactory;
+        }
         public ICar Configure()
         {
             Console.Clear();
             Console.WriteLine( "=== Конфигурация нового автомобиля ===" );
 
             string brand = GetBrand();
-            EngineType engineType = GetEngineType();
-            TransmissionType transmissionType = GetTransmissionType();
-            (BodyType bodyType, ColorType colorType) = GetBodyAndColor();
+            EngineType engineType = GetComponentType<EngineType>( "двигатель" );
+            TransmissionType transmissionType = GetComponentType<TransmissionType>( "коробку передач" );
+            BodyType bodyType = GetComponentType<BodyType>( "тип кузова" );
+            ColorType colorType = GetComponentType<ColorType>( "цвет" );
 
-            IEngine engine = EngineFactory.CreateEngine( engineType );
-            ITransmission transmission = TransmissionFactory.CreateTransmission( transmissionType );
-            IBody body = BodyFactory.CreateBody( bodyType, colorType );
+
+            IEngine engine = _engineFactory.CreateEngine( engineType );
+            ITransmission transmission = _transmissionFactory.CreateTransmission( transmissionType );
+            IBody body = _bodyFactory.CreateBody( bodyType, colorType );
 
             return new Car( brand, engine, transmission, body );
         }
@@ -32,76 +50,38 @@ namespace CarFactory.UI
             return Console.ReadLine() ?? "Без марки";
         }
 
-        private EngineType GetEngineType()
+        private T GetComponentType<T>( string componentName ) where T : Enum
         {
-            Console.WriteLine( "\nВыберите двигатель:" );
-            Console.WriteLine( "1. Бензиновый (150 л.с.)" );
-            Console.WriteLine( "2. Дизельный (200 л.с.)" );
+            Console.WriteLine( $"\nВыберите {componentName}:" );
 
-            return GetChoice( 2 ) switch
+            // Получаем все значения enum
+            Array values = Enum.GetValues( typeof( T ) );
+
+            // Выводим все варианты
+            foreach ( T value in values )
             {
-                1 => EngineType.Gasoline,
-                2 => EngineType.Diesel,
-                _ => throw new InvalidOperationException( "Некорректный выбор двигателя" )
-            };
-        }
+                string description = GetEnumDescription( value );
+                Console.WriteLine( $"{( int )( object )value}. {description}" );
+            }
 
-        private TransmissionType GetTransmissionType()
-        {
-            Console.WriteLine( "\nВыберите коробку передач:" );
-            Console.WriteLine( "1. Автоматическая (6 передач)" );
-            Console.WriteLine( "2. Механическая (5 передач)" );
-
-            return GetChoice( 2 ) switch
-            {
-                1 => TransmissionType.Automatic,
-                2 => TransmissionType.Manual,
-                _ => throw new InvalidOperationException( "Некорректный выбор коробки передач" )
-            };
-        }
-
-        private (BodyType, ColorType) GetBodyAndColor()
-        {
-            Console.WriteLine( "\nВыберите тип кузова:" );
-            Console.WriteLine( "1. Седан" );
-            Console.WriteLine( "2. Хэтчбек" );
-            int bodyChoice = GetChoice( 2 );
-
-            Console.WriteLine( "\nВыберите цвет:" );
-            Console.WriteLine( "1. Красный" );
-            Console.WriteLine( "2. Синий" );
-            Console.WriteLine( "3. Чёрный" );
-            Console.WriteLine( "4. Белый" );
-            int colorChoice = GetChoice( 4 );
-
-            BodyType bodyType = bodyChoice switch
-            {
-                1 => BodyType.Sedan,
-                2 => BodyType.Hatchback,
-                _ => throw new InvalidOperationException( "Некорректный выбор кузова" )
-            };
-
-            ColorType colorType = colorChoice switch
-            {
-                1 => ColorType.Red,
-                2 => ColorType.Blue,
-                3 => ColorType.Black,
-                4 => ColorType.White,
-                _ => throw new InvalidOperationException( "Некорректный выбор цвета" )
-            };
-
-            return (bodyType, colorType);
-        }
-
-        private int GetChoice( int maxOption )
-        {
-            int choice;
-            do
+            // Валидация ввода
+            while ( true )
             {
                 Console.Write( "> " );
-            } while ( !int.TryParse( Console.ReadLine(), out choice ) || choice < 1 || choice > maxOption );
+                if ( int.TryParse( Console.ReadLine(), out int choice ) && Enum.IsDefined( typeof( T ), choice ) )
+                {
+                    return ( T )Enum.ToObject( typeof( T ), choice );
+                }
 
-            return choice;
+                Console.WriteLine( $"Неверный выбор! Введите число от 1 до {values.Length}" );
+            }
+        }
+
+        private static string GetEnumDescription( Enum value )
+        {
+            FieldInfo? field = value.GetType().GetField( value.ToString() );
+            DescriptionAttribute? attribute = Attribute.GetCustomAttribute( field, typeof( DescriptionAttribute ) ) as DescriptionAttribute;
+            return attribute?.Description ?? value.ToString();
         }
     }
 }

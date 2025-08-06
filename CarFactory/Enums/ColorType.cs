@@ -1,10 +1,19 @@
+using System.ComponentModel;
+
 namespace CarFactory.Enums
 {
     public enum ColorType
     {
-        Red,
-        Blue,
-        Black,
-        White
+        [Description( "Красный" )]
+        Red = 1,
+
+        [Description( "Синий" )]
+        Blue = 2,
+
+        [Description( "Чёрный" )]
+        Black = 3,
+
+        [Description( "Белый" )]
+        White = 4
     }
 }

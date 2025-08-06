@@ -1,9 +1,14 @@
 
+using System.ComponentModel;
+
 namespace CarFactory.Enums
 {
     public enum BodyType
     {
-        Sedan,
-        Hatchback
+        [Description( "Седан" )]
+        Sedan = 1,
+
+        [Description( "Хэтчбек" )]
+        Hatchback = 2
     }
 }

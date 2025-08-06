@@ -1,11 +1,11 @@
 using CarFactory.Entities.Transmissions;
 using CarFactory.Enums;
 
-namespace CarFactory.Factories
+namespace CarFactory.Factories.Transmission
 {
-    public static class TransmissionFactory
+    public class TransmissionFactory : ITransmissionFactory
     {
-        public static ITransmission CreateTransmission( TransmissionType transmissionType )
+        public ITransmission CreateTransmission( TransmissionType transmissionType )
         {
             return transmissionType switch
             {
