@@ -10,7 +10,22 @@ namespace Fighters.Core
         public IFighter StartBattle( List<IFighter> fighters )
         {
             Console.Clear();
+            // Диагностика перед боем
+            if ( fighters == null )
+                throw new ArgumentNullException( nameof( fighters ), "Список бойцов не инициализирован." );
+
+            Console.WriteLine( $"[DEBUG] Количество бойцов: {fighters.Count}" );
+            for ( int i = 0; i < fighters.Count; i++ )
+            {
+                var f = fighters[ i ];
+                if ( f == null )
+                    throw new InvalidOperationException( $"[DEBUG] Боец #{i} равен NULL" );
+                Console.WriteLine( $"[DEBUG] Боец #{i}: {f.GetType().Name}, Name={f.Name}, HP={f.CurrentHealth}/{f.MaxHealth}" );
+            }
             Console.WriteLine( "=== НАЧАЛО БИТВЫ ===" );
+            Console.WriteLine( "Список бойцов:" );
+            // foreach ( var f in fighters )
+            //     Console.WriteLine( f?.Name ?? "NULL" );
             Console.WriteLine( $"Участники: {string.Join( ", ", fighters.Select( f => f.Name ) )}" );
             Console.WriteLine( "----------------------------------" );
 

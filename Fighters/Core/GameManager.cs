@@ -23,7 +23,7 @@ public class GameManager
             _currentMenu.Display();
 
             // Показываем меню подтверждения, если создание бойца готово
-            if ( _currentMenu is CreateFighterMenu createMenu && createMenu.IsReadyToConfirm() )
+            if ( _currentMenu is CreateFighterMenu createMenu && IsConfirmSelectionState() )
             {
                 createMenu.DisplaySummary();
 
@@ -41,13 +41,24 @@ public class GameManager
                     {
                         case NavigationOptions.Confirm:
                             createMenu.CompleteFighterCreation();
-                            _fighters.Add( createMenu.CurrentFighter! );
-                            _currentMenu = new MainMenu();
+                            if ( createMenu.CurrentFighter != null )
+                            {
+                                _fighters.Add( createMenu.CurrentFighter );
+                                _currentMenu = new MainMenu();
+                            }
+                            else
+                            {
+                                createMenu.CurrentState = createMenu.StateHistory.Pop();
+                                Console.WriteLine( "[DEBUG] Попытка добавить пустого бойца! Создание не завершено." );
+                                Console.WriteLine( "Нажмите любую кнопку чтобы перейти обратно в меню" );
+                                Console.ReadKey();
+                            }
+                            // _fighters.Add( createMenu.CurrentFighter );
                             break;
 
                         case NavigationOptions.Back:
                             // Возвращаемся в меню создания без подтверждения
-                            createMenu.CurrentState = MenuState.CreateFighter;
+                            createMenu.CurrentState = createMenu.StateHistory.Pop();
                             // Явно перерисовываем экран
                             Console.Clear();
                             createMenu.Display();
@@ -108,24 +119,34 @@ public class GameManager
         }
     }
 
-    private void DisplayFighterSummary( CreateFighterMenu menu )
-    {
-        Console.WriteLine( "\n=== ВАШ ВЫБОР ===" );
-        Console.WriteLine( $"Тип: {menu.FighterType}" );
-        Console.WriteLine( $"Раса: {menu.SelectedRace?.Name ?? "не выбрано"}" );
-        Console.WriteLine( $"Класс: {menu.SelectedClass?.Name ?? "не выбрано"}" );
-        Console.WriteLine( $"Оружие: {menu.SelectedWeapon?.Name ?? "не выбрано"}" );
-        Console.WriteLine( $"Броня: {menu.SelectedArmor?.Name ?? "не выбрано"}" );
-    }
+    // private void DisplayFighterSummary( CreateFighterMenu menu )
+    // {
+    //     Console.WriteLine( "\n=== ВАШ ВЫБОР ===" );
+    //     Console.WriteLine( $"Тип: {menu.FighterType}" );
+    //     Console.WriteLine( $"Раса: {menu.SelectedRace?.Name ?? "не выбрано"}" );
+    //     Console.WriteLine( $"Класс: {menu.SelectedClass?.Name ?? "не выбрано"}" );
+    //     Console.WriteLine( $"Оружие: {menu.SelectedWeapon?.Name ?? "не выбрано"}" );
+    //     Console.WriteLine( $"Броня: {menu.SelectedArmor?.Name ?? "не выбрано"}" );
+    // }
 
-    private bool IsSelectionState()
+    // private bool IsSelectionState()
+    // {
+    //     if ( _currentMenu is CreateFighterMenu createMenu )
+    //     {
+    //         return createMenu.CurrentState is MenuState.SelectRace
+    //             or MenuState.SelectClass
+    //             or MenuState.SelectWeapon
+    //             or MenuState.SelectArmor;
+    //     }
+
+    //     return false;
+    // }
+
+    private bool IsConfirmSelectionState()
     {
         if ( _currentMenu is CreateFighterMenu createMenu )
         {
-            return createMenu.CurrentState is MenuState.SelectRace
-                or MenuState.SelectClass
-                or MenuState.SelectWeapon
-                or MenuState.SelectArmor;
+            return createMenu.CurrentState is MenuState.CreationConfirm;
         }
 
         return false;

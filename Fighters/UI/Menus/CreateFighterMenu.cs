@@ -17,11 +17,6 @@ namespace Fighters.UI.Menus
         private IWeapon? _selectedWeapon;
         private IArmor? _selectedArmor;
 
-        public IRace? SelectedRace => _selectedRace;
-        public IClass? SelectedClass => _selectedClass;
-        public IWeapon? SelectedWeapon => _selectedWeapon;
-        public IArmor? SelectedArmor => _selectedArmor;
-
         public override void Display()
         {
             Console.Clear();
@@ -40,7 +35,6 @@ namespace Fighters.UI.Menus
 
             switch ( CurrentState )
             {
-                case MenuState.Recreation:
                 case MenuState.CreateFighter:
                 case MenuState.CreateOpponent:
                     Console.WriteLine( "1. Выбрать расу" );
@@ -104,7 +98,8 @@ namespace Fighters.UI.Menus
                         NavigateTo( MenuState.SelectArmor );
                         break;
                     case 5:
-                        CompleteFighterCreation();
+                        NavigateTo( MenuState.CreationConfirm );
+                        //CompleteFighterCreation();
                         break;
                     case 6:
                         // Возврат в главное меню с очисткой
@@ -147,7 +142,6 @@ namespace Fighters.UI.Menus
 
             switch ( CurrentState )
             {
-                case MenuState.Recreation:
                 case MenuState.CreateFighter:
                 case MenuState.CreateOpponent:
                     HandleCreationMenuInput();
@@ -222,7 +216,6 @@ namespace Fighters.UI.Menus
         {
             try
             {
-                DisplaySummary();
                 // Создание экземпляра бойца через фабрику
                 CurrentFighter = _fighterFactory.CreateFighter(
                     FighterType,
@@ -240,7 +233,6 @@ namespace Fighters.UI.Menus
             catch ( Exception ex )
             {
                 Console.WriteLine( $"Ошибка: {ex.Message}" );
-                Console.ReadKey();
             }
         }
     }
