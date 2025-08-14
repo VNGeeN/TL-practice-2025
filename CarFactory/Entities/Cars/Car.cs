@@ -30,9 +30,9 @@ namespace CarFactory.Entities.Cars
         public override string ToString()
         {
             return $"Марка: {Name}\n" +
-                   $"Двигатель: {Engine.Name} ({Engine.Power} л.с.)\n" +
-                   $"Коробка передач: {Transmission.Name} ({Transmission.Gears} передач)\n" +
-                   $"Кузов: {Body.Shape}, цвет: {Body.Color}\n" +
+                   $"Двигатель: {Engine.GetDescription()}\n" +
+                   $"Коробка передач: {Transmission.GetDescription()}\n" +
+                   $"Кузов: {Body.GetDescription()}\n" +
                    $"Макс. скорость: {MaxSpeed:F1} км/ч";
         }
     }

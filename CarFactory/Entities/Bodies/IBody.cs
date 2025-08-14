@@ -4,5 +4,7 @@ namespace CarFactory.Entities.Bodies
     {
         string Shape { get; }
         string Color { get; }
+
+        string GetDescription();
     }
 }

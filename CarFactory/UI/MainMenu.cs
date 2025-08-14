@@ -1,11 +1,15 @@
 using CarFactory.Entities.Cars;
+using CarFactory.UI.Enums.MainMenu;
+using CarFactory.UI.Configs.MainMenuConfig;
 
 namespace CarFactory.UI
 {
     public class MainMenu
     {
         private readonly ICarConfigurator _configurator;
+
         private readonly List<ICar> _configuredCars = new List<ICar>();
+
 
         public MainMenu( ICarConfigurator configurator )
         {
@@ -14,33 +18,36 @@ namespace CarFactory.UI
 
         public void Show()
         {
-            bool IsShow = true;
-            while ( IsShow )
+            bool isShow = true;
+            while ( isShow )
             {
                 Console.Clear();
-                Console.WriteLine( "=== Автомобильный Конфигуратор ===" );
-                Console.WriteLine( "1. Сконфигурировать новый автомобиль" );
-                Console.WriteLine( "2. Просмотреть сконфигурированные автомобили" );
-                Console.WriteLine( "3. Выход" );
-                Console.Write( "Выберите опцию: " );
+                MainMenuOperations options = MainMenuChoice();
 
-                switch ( Console.ReadLine() )
+                switch ( options )
                 {
-                    case "1":
+                    case MainMenuOperations.ConfigureNewCar:
                         ConfigureNewCar();
                         break;
-                    case "2":
+                    case MainMenuOperations.ShowConfiguredCars:
                         ShowConfiguredCars();
                         break;
-                    case "3":
-                        IsShow = false;
+                    case MainMenuOperations.Exit:
+                        isShow = false;
                         return;
-                    default:
-                        Console.WriteLine( "Неверный ввод! Нажмите любую клавишу..." );
-                        Console.ReadKey();
-                        break;
+                        // default:
+                        //     Console.WriteLine( "Неверный ввод! Нажмите любую клавишу..." );
+                        //     Console.ReadKey();
+                        //     break;
                 }
             }
+        }
+
+        private static MainMenuOperations MainMenuChoice()
+        {
+            Dictionary<MainMenuOperations, string> options = MainMenuConfig.DisplayMainMenu();
+
+            return DataInputService.GetMenuChoice( options );
         }
 
         private void ConfigureNewCar()

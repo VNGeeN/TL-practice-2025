@@ -1,15 +1,22 @@
-using System.ComponentModel;
-using System.Reflection;
 using CarFactory.Entities.Bodies;
 using CarFactory.Enums;
+using CarFactory.Services;
 
 namespace CarFactory.Factories.Body
 {
     public class BodyFactory : IBodyFactory
     {
+
+        private readonly IDescriptionService _descriptionService;
+
+        public BodyFactory( IDescriptionService descriptionService )
+        {
+            _descriptionService = descriptionService;
+        }
+
         public IBody CreateBody( BodyType bodyType, ColorType colorType )
         {
-            string color = GetEnumDescription( colorType );
+            string color = _descriptionService.GetColorName( colorType );
 
             return bodyType switch
             {
@@ -17,13 +24,6 @@ namespace CarFactory.Factories.Body
                 BodyType.Hatchback => new HatchbackBody( color ),
                 _ => throw new ArgumentException( $"Неподдерживаемый тип кузова: {bodyType}" )
             };
-        }
-
-        private static string GetEnumDescription( Enum value )
-        {
-            FieldInfo? field = value.GetType().GetField( value.ToString() );
-            DescriptionAttribute? attribute = Attribute.GetCustomAttribute( field, typeof( DescriptionAttribute ) ) as DescriptionAttribute;
-            return attribute?.Description ?? value.ToString();
         }
     }
 }
