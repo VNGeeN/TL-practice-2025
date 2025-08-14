@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "server", "server\server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveCoding", "LiveCoding\LiveCoding.csproj", "{16705B36-755F-43A3-A47B-C9C46062AB76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarFactory", "CarFactory\CarFactory.csproj", "{D63F5105-645C-42D1-B347-ABE2B51DF4E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{16705B36-755F-43A3-A47B-C9C46062AB76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16705B36-755F-43A3-A47B-C9C46062AB76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16705B36-755F-43A3-A47B-C9C46062AB76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D63F5105-645C-42D1-B347-ABE2B51DF4E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D63F5105-645C-42D1-B347-ABE2B51DF4E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D63F5105-645C-42D1-B347-ABE2B51DF4E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D63F5105-645C-42D1-B347-ABE2B51DF4E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
